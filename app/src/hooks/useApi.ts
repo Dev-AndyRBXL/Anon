@@ -43,6 +43,7 @@ export const apiRequest = async <T>({
     'Content-Type': 'application/json',
     'x-api-key': API_KEY,
   };
+  // passport-jwt expects an 'Authorization' key in the 'headers' object
   if (token) headers['Authorization'] = `Bearer ${token}`;
 
   let res: Response;
