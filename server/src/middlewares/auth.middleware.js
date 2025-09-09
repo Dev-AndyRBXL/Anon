@@ -13,11 +13,11 @@ const options = {
   secretOrKey: config.jwtSecret,
 };
 
-// Strategy integration with passport 
+// Strategy integration with passport
 passport.use(
   new JwtStrategy(options, async (payload, done) => {
     try {
-      const user = await User.findByPk(payload.user.id);
+      const user = await User.findByPk(payload.id);
       if (user) return done(null, user);
       return done(null, false);
     } catch (err) {
