@@ -3,15 +3,15 @@ const router = express.Router();
 const {
   signup,
   login,
-  deleteAccount,
-  updateAccount,
+  deleteProfile,
+  updateProfile,
 } = require('../controllers/auth.controller');
 const authenticateJwt = require('../middlewares/auth.middleware');
 const {
   signupValidation,
   loginValidation,
   validateResult,
-} = require('../utils/validators');
+} = require('../utils/validation');
 
 /**
  * The user must send a .json object here
@@ -44,9 +44,9 @@ router.post(
 );
 
 // UPDATE routes
-router.patch('/update', authenticateJwt, updateAccount);
+router.patch('/update', authenticateJwt, validateResult, updateProfile);
 
 // DELETE
-router.delete('/delete', authenticateJwt, deleteAccount);
+router.delete('/delete', authenticateJwt, deleteProfile);
 
 module.exports = router;
