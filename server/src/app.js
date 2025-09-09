@@ -3,7 +3,7 @@ const passport = require('passport');
 const authRoutes = require('./routes/auth.routes');
 const errorMiddleware = require('./middlewares/error.middleware');
 const cors = require('cors');
-const { validateApiKey } = require('./utils/validators');
+const { validateApiKey } = require('./utils/validation');
 
 const app = express();
 
