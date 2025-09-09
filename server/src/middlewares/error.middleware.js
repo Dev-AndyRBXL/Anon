@@ -12,13 +12,14 @@ module.exports = function (err, req, res, next) {
     logger.error(`[${status}] ${message}`);
   }
 
-  // Build a safe JSON response
+  // Consistent JSON error response
   const response = {
-    status,
+    success: false,
     message,
+    errors: [],
   };
 
-  // Include stack trace in dev mode
+  // Include stack in dev
   if (process.env.NODE_ENV === 'development') {
     response.stack = err.stack;
   }
