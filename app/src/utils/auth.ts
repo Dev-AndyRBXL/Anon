@@ -1,4 +1,3 @@
-// auth.ts
 import { apiRequest } from './api';
 
 export interface SignupPayload {
@@ -51,7 +50,7 @@ export const login = async (credentials: LoginPayload) => {
 
 export const updateProfile = async (token: string, updates: UpdateProfilePayload) => {
   return apiRequest<User>({
-    endpoint: '/user',
+    endpoint: '/auth/update',
     method: 'PATCH',
     data: updates,
     token,
@@ -59,8 +58,8 @@ export const updateProfile = async (token: string, updates: UpdateProfilePayload
 };
 
 export const deleteAccount = async (token: string) => {
-  return apiRequest<{ message: string }>({
-    endpoint: '/user',
+  return apiRequest<Record<string, unknown>>({
+    endpoint: '/auth/delete',
     method: 'DELETE',
     token,
   });

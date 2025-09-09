@@ -23,7 +23,16 @@ exports.signup = async (req, res, next) => {
       },
     });
   } catch (err) {
-    next(err);
+    if (
+      err.name === 'SequelizeValidationError' ||
+      err.name === 'SequelizeUniqueConstraintError'
+    ) {
+      return res.status(400).json({
+        message: 'Validation error',
+        details: err.errors.map((e) => e.message), 
+      });
+    }
+    next(err); 
   }
 };
 

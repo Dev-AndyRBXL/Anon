@@ -1,4 +1,5 @@
 const { body, validationResult } = require('express-validator');
+const config = require('../config');
 
 // ---- Used in Auth.routes.js ----
 /**
