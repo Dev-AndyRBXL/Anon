@@ -3,17 +3,30 @@ const passport = require('passport');
 const authRoutes = require('./routes/auth.routes');
 const errorMiddleware = require('./middlewares/error.middleware');
 const cors = require('cors');
+const { validateApiKey } = require('./utils/validators');
 
 const app = express();
+
 app.use(express.json());
 app.use(passport.initialize());
 app.use(cors({
   origin: 'http://localhost:5173',
-  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
   credentials: true,
 }));
 
-app.use('/api/auth', authRoutes);
+/**
+ * Template of request:
+ * Headers:
+ *   x-api-key: [api key]
+ *
+ * Body:
+ * {
+ *   ...[other stuff]
+ * }
+ */
+
+app.use('/api/auth', validateApiKey, authRoutes);
 
 app.use(errorMiddleware);
 
