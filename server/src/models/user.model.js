@@ -1,33 +1,39 @@
 const bcrypt = require('bcryptjs');
 const { dbSalt } = require('../config');
+const { userSchema } = require('../utils/schemas');
 
 module.exports = (sequelize, DataTypes) => {
-  const User = sequelize.define('User', {
-    username: { type: DataTypes.STRING, unique: true, allowNull: false },
-    password: { type: DataTypes.STRING, allowNull: false },
-    email: {
-      type: DataTypes.STRING,
-      unique: true,
-      allowNull: false,
-      validate: { isEmail: true },
-    },
-  });
+  // Define the user
+  const User = sequelize.define('User', userSchema);
 
   User.beforeCreate(async (user) => {
+    if (user.username) user.username = user.username.trim().toLowerCase();
+    if (user.email) user.email = user.email.trim().toLowerCase();
+
     const salt = await bcrypt.genSalt(dbSalt);
     user.password = await bcrypt.hash(user.password, salt);
   });
 
   User.beforeUpdate(async (user) => {
+    if (user.username) user.username = user.username.trim().toLowerCase();
+    if (user.email) user.email = user.email.trim().toLowerCase();
+
     if (user.changed('password')) {
       const salt = await bcrypt.genSalt(dbSalt);
       user.password = await bcrypt.hash(user.password, salt);
     }
   });
-
+  
+  // User Utility functions
+  /**
+   * @param {The user password} password 
+   * @returns {boolean}
+   */
   User.prototype.comparePassword = function (password) {
     return bcrypt.compare(password, this.password);
   };
 
   return User;
 };
+
+// Andy was here
