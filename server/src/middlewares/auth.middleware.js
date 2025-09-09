@@ -2,29 +2,18 @@ const { Strategy: JwtStrategy, ExtractJwt } = require('passport-jwt');
 const passport = require('passport');
 const config = require('../config');
 const { User } = require('../models');
-const { body, validationResult } = require('express-validator');
 
-module.validationChain = [
-  body('username').notEmpty().withMessage('Username is required'),
-  body('email').isEmail().withMessage('Email is invalid'),
-  body('password')
-    .isLength({ min: 8 })
-    .withMessage('Password must be at least 8 characters long'),
-];
-
-module.validate = async (req, res, next) => {
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    return res.status(400).json({ errors: errors.array() });
-  }
-  next();
-};
-
+/**
+ * Options:
+ *  jwtFromRequest: The extracted token
+ *  secretOrKey: {The jwt secret}
+ */
 const options = {
   jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
   secretOrKey: config.jwtSecret,
 };
 
+// Strategy integration with passport 
 passport.use(
   new JwtStrategy(options, async (payload, done) => {
     try {

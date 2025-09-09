@@ -1,11 +1,12 @@
 require('dotenv').config();
 
 const env = {
-  // server
+  // Server
   port: process.env.PORT || 3001,
   nodeEnv: process.env.NODE_ENV || 'development',
+  apiKey: process.env.API_KEY,
 
-  // db
+  // DB
   dbHost: process.env.DB_HOST,
   dbUser: process.env.DB_USER,
   dbPassword: process.env.DB_PASSWORD,
@@ -14,13 +15,13 @@ const env = {
   dbSalt: process.env.DB_SALT,
   dbDialect: 'postgres',
 
-  // authentication
+  // Authentication
   jwtSecret: process.env.JWT_SECRET,
-  jwtExpiresIn: process.env.JWT_EXPIRES_IN,
+  jwtExpiresIn: process.env.NODE_ENV === 'production' ? '30d' : '1h',
 };
 
-module.exports = {
-  ...env,
-  isProduction: () => env.nodeEnv === 'production',
-  isDevelopment: () => env.nodeEnv === 'development',
-};
+// Utils
+env.isProduction = () => env.nodeEnv === 'production';
+env.isDevelopment = () => env.nodeEnv === 'development';
+
+module.exports = env;
