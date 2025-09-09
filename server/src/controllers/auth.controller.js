@@ -3,6 +3,18 @@ const { User } = require('../models');
 const config = require('../config');
 
 /**
+ * Helper to send consistent error responses
+ */
+const sendError = (
+  res,
+  status = 500,
+  message = 'Internal Server Error',
+  errors = []
+) => {
+  return res.status(status).json({ success: false, message, errors });
+};
+
+/**
  * Signup a new user
  * POST /api/auth/signup
  */
@@ -13,8 +25,9 @@ exports.signup = async (req, res, next) => {
     const user = await User.create({ username, email, password, displayname });
 
     res.status(201).json({
+      success: true,
       message: 'User created',
-      user: {
+      data: {
         id: user.id,
         username: user.username,
         displayname: user.displayname,
@@ -27,12 +40,14 @@ exports.signup = async (req, res, next) => {
       err.name === 'SequelizeValidationError' ||
       err.name === 'SequelizeUniqueConstraintError'
     ) {
-      return res.status(400).json({
-        message: 'Validation error',
-        details: err.errors.map((e) => e.message), 
-      });
+      return sendError(
+        res,
+        400,
+        'Validation error',
+        err.errors.map((e) => e.message)
+      );
     }
-    next(err); 
+    next(err);
   }
 };
 
@@ -46,64 +61,20 @@ exports.login = async (req, res, next) => {
 
     const user = await User.findOne({ where: { username } });
     if (!user || !(await user.comparePassword(password))) {
-      return res.status(401).json({ message: 'Invalid credentials' });
+      return sendError(res, 401, 'Invalid credentials', []);
     }
 
-    // Sign JWT
     const token = jwt.sign(
       { id: user.id, username: user.username, role: user.role },
       config.jwtSecret,
       { expiresIn: config.jwtExpiresIn }
     );
 
-    res.json({ token });
-  } catch (err) {
-    next(err);
-  }
-};
-
-/**
- * Get own account info
- * GET /api/user/profile
- */
-exports.getAccount = async (req, res, next) => {
-  try {
-    const user = req.user;
-
     res.json({
-      id: user.id,
-      username: user.username,
-      displayname: user.displayname,
-      email: user.email,
-      role: user.role,
-      description: user.description,
-    });
-  } catch (err) {
-    next(err);
-  }
-};
-
-/**
- * Update own account
- * PUT /api/user/profile
- */
-exports.updateAccount = async (req, res, next) => {
-  try {
-    const user = req.user;
-
-    const { username, email, password, displayname, description } = req.body;
-
-    if (username) user.username = username.trim().toLowerCase();
-    if (email) user.email = email.trim().toLowerCase();
-    if (displayname) user.displayname = displayname.trim();
-    if (description) user.description = description;
-    if (password) user.password = password; // will be hashed via hook
-
-    await user.save();
-
-    res.json({
-      message: 'Account updated',
-      user: {
+      success: true,
+      message: 'Login successful',
+      token,
+      data: {
         id: user.id,
         username: user.username,
         displayname: user.displayname,
@@ -118,16 +89,55 @@ exports.updateAccount = async (req, res, next) => {
 };
 
 /**
- * Delete own account
+ * Update own profile
+ * PATCH /api/auth/update
+ */
+exports.updateProfile = async (req, res, next) => {
+  try {
+    const user = req.user;
+
+    const { username, email, password, displayname, description } = req.body;
+
+    if (username) user.username = username.trim().toLowerCase();
+    if (email) user.email = email.trim().toLowerCase();
+    if (displayname) user.displayname = displayname.trim();
+    if (description) user.description = description;
+    if (password) user.password = password; // will be hashed via hook
+
+    await user.save();
+
+    res.json({
+      success: true,
+      message: 'Profile updated',
+      data: {
+        id: user.id,
+        username: user.username,
+        displayname: user.displayname,
+        email: user.email,
+        role: user.role,
+        description: user.description,
+      },
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
+/**
+ * Delete own profile
  * DELETE /api/user/profile
  */
-exports.deleteAccount = async (req, res, next) => {
+exports.deleteProfile = async (req, res, next) => {
   try {
     const user = req.user;
 
     await user.destroy();
 
-    res.json({ message: 'Account deleted successfully' });
+    res.json({
+      success: true,
+      message: 'Profile deleted successfully',
+      data: null,
+    });
   } catch (err) {
     next(err);
   }
