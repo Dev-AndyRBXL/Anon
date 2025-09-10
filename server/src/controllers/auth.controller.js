@@ -93,7 +93,7 @@ exports.login = async (req, res, next) => {
 
 // Refresh token
 exports.refresh = (req, res) => {
-  const refreshToken = req.cookies.refreshToken;
+  const refreshToken = req.cookies.refreshToken;  
   if (!refreshToken) return sendError(res, 401, 'Refresh token required');
 
   jwt.verify(refreshToken, config.refreshSecret, (err, decoded) => {
