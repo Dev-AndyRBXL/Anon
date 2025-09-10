@@ -15,6 +15,7 @@ export interface LoginPayload {
 export interface UpdateProfilePayload {
   username?: string;
   displayname?: string;
+  password?: string;
   description?: string;
   [key: string]: unknown;
 }

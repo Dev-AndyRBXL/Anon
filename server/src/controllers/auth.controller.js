@@ -23,7 +23,7 @@ exports.signup = async (req, res, next) => {
       data: {
         id: user.id,
         username: user.username,
-        displayname: user.displayname,
+        displayname: user.displayname ?? '',
         email: user.email,
         role: user.role,
       },
