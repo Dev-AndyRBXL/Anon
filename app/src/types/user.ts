@@ -1,4 +1,5 @@
 export interface SignupPayload {
+  displayname?: string;
   username: string;
   email: string;
   password: string;
@@ -6,12 +7,13 @@ export interface SignupPayload {
 }
 
 export interface LoginPayload {
-  username: string;
+  identifier: string; // email or username
   password: string;
   [key: string]: unknown;
 }
 
 export interface UpdateProfilePayload {
+  username?: string;
   displayname?: string;
   description?: string;
   [key: string]: unknown;

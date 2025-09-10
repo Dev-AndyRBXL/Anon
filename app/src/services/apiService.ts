@@ -1,4 +1,3 @@
-/* auth.ts */
 import { apiRequest } from './apiClient';
 import {
   type User,
@@ -7,6 +6,11 @@ import {
   type UpdateProfilePayload,
 } from '../types/user';
 
+/**
+ * Signup
+ * @param userData
+ * @returns
+ */
 export const signup = async (userData: SignupPayload) => {
   return apiRequest<User>({
     endpoint: '/auth/signup',
@@ -15,6 +19,11 @@ export const signup = async (userData: SignupPayload) => {
   });
 };
 
+/**
+ * Login
+ * @param credentials (i.e.: { username: John, password: **** })
+ * @returns
+ */
 export const login = async (credentials: LoginPayload) => {
   return apiRequest<User>({
     endpoint: '/auth/login',
@@ -23,6 +32,19 @@ export const login = async (credentials: LoginPayload) => {
   });
 };
 
+export const logout = async () => {
+  return apiRequest<User>({
+    endpoint: '/auth/logout',
+    method: 'POST',
+  });
+};
+
+/**
+ * Update Profile
+ * @param token
+ * @param updates
+ * @returns
+ */
 export const updateProfile = async (
   token: string,
   updates: UpdateProfilePayload
@@ -35,6 +57,11 @@ export const updateProfile = async (
   });
 };
 
+/**
+ * Delete Profile
+ * @param token
+ * @returns
+ */
 export const deleteProfile = async (token: string) => {
   return apiRequest<null>({
     endpoint: '/auth/delete',

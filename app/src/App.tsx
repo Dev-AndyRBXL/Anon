@@ -18,15 +18,15 @@ function App() {
         }
         logger.info({ signupRes }, 'Signed up successfully');
 
-        const loginRes = await login({ username, password });
-        if (!loginRes.success || !loginRes.token) {
+        const loginRes = await login({ identifier: username, password });
+        if (!loginRes.success || !loginRes.accessToken) {
           return logger.error(
             { message: loginRes.message, errors: loginRes.errors },
             'Login failed'
           );
         }
         logger.info({ loginRes }, 'Logged in successfully');
-        const token = loginRes.token;
+        const token = loginRes.accessToken;
 
         const updated = await updateProfile(token, {
           displayname: 'Andy D.',

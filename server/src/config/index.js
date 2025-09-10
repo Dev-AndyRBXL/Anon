@@ -1,5 +1,8 @@
 require('dotenv').config();
 
+const accessExpiresIn = '15m';
+const refreshExpiresIn = '1y';
+
 const env = {
   // Server
   port: process.env.PORT || 3001,
@@ -16,8 +19,12 @@ const env = {
   dbDialect: 'postgres',
 
   // Authentication
-  jwtSecret: process.env.JWT_SECRET,
-  jwtExpiresIn: process.env.NODE_ENV === 'production' ? '30d' : '1h',
+  accessSecret: process.env.ACCESS_SECRET,
+  refreshSecret: process.env.REFRESH_SECRET,
+  accessExpiresIn:
+    process.env.NODE_ENV === 'production' ? accessExpiresIn : '30s',
+  refreshExpiresIn:
+    process.env.NODE_ENV === 'production' ? refreshExpiresIn : '1h',
 };
 
 // Utils
