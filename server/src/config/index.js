@@ -19,10 +19,10 @@ const env = {
   dbDialect: 'postgres',
 
   // Authentication
-  accessSecret: process.env.ACCESS_SECRET,
+  accessSecret: process.env.ACCESS_SECRET || 'default',
   refreshSecret: process.env.REFRESH_SECRET,
   accessExpiresIn:
-    process.env.NODE_ENV === 'production' ? accessExpiresIn : '30s',
+    process.env.NODE_ENV === 'production' ? accessExpiresIn : '30m',
   refreshExpiresIn:
     process.env.NODE_ENV === 'production' ? refreshExpiresIn : '1h',
 };

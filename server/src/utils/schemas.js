@@ -17,4 +17,6 @@ exports.userSchema = {
   },
   role: { type: DataTypes.STRING, allowNull: false, defaultValue: 'user' },
   createdAt: { type: DataTypes.DATE },
+  // this is for soft delete
+  deletedAt: { type: DataTypes.DATE, allowNull: true },
 };
