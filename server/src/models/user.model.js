@@ -10,7 +10,7 @@ module.exports = (sequelize, DataTypes) => {
     if (user.username) user.username = user.username.trim().toLowerCase();
     if (user.email) user.email = user.email.trim().toLowerCase();
 
-    const salt = await bcrypt.genSalt(dbSalt);
+    const salt = await bcrypt.genSalt(parseInt(dbSalt));
     user.password = await bcrypt.hash(user.password, salt);
   });
 

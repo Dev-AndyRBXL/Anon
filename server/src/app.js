@@ -1,6 +1,7 @@
 const express = require('express');
 const passport = require('passport');
 const authRoutes = require('./routes/auth.routes');
+const userRoutes = require('./routes/user.routes');
 const errorMiddleware = require('./middlewares/error.middleware');
 const cors = require('cors');
 const { validateApiKey } = require('./utils/validation');
@@ -31,6 +32,7 @@ app.use(
  */
 
 app.use('/api/auth', validateApiKey, authRoutes);
+app.use('/api/users', validateApiKey, userRoutes);
 
 app.use(errorMiddleware);
 
