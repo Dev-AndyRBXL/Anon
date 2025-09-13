@@ -123,36 +123,3 @@ exports.logout = (req, res) => {
   res.clearCookie('refreshToken');
   res.json({ success: true, message: 'Logged out' });
 };
-
-// Update profile
-// exports.updateProfile = async (req, res, next) => {
-//   try {
-//     const user = req.user;
-//     const { username, email, password, displayname, description } = req.body;
-
-//     if (username) user.username = username.trim().toLowerCase();
-//     if (email) user.email = email.trim().toLowerCase();
-//     if (displayname) user.displayname = displayname.trim();
-//     if (description) user.description = description;
-//     if (password) user.password = password; // hashed via hook
-
-//     await user.save();
-
-//     res.json({ success: true, message: 'Profile updated', data: user });
-//   } catch (err) {
-//     next(err);
-//   }
-// };
-
-// Delete profile
-// exports.deleteProfile = async (req, res, next) => {
-//   try {
-//     const user = req.user;
-//     await user.destroy();
-
-//     res.clearCookie('refreshToken');
-//     res.json({ success: true, message: 'Profile deleted', data: null });
-//   } catch (err) {
-//     next(err);
-//   }
-// };
