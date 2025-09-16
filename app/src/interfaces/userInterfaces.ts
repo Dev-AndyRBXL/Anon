@@ -1,17 +1,3 @@
-export interface SignupPayload {
-  displayname?: string;
-  username: string;
-  email: string;
-  password: string;
-  [key: string]: unknown;
-}
-
-export interface LoginPayload {
-  identifier: string; // email or username
-  password: string;
-  [key: string]: unknown;
-}
-
 export interface UpdateProfilePayload {
   username?: string;
   displayname?: string;

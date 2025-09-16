@@ -1,7 +1,7 @@
 exports.updateProfile = async (req, res, next) => {
   try {
     const user = req.user;
-    if (!user) return res.status(401).json({ error: "Unauthorized" });
+    if (!user) return res.status(401).json({ error: 'Unauthorized' });
 
     const {
       displayname,
@@ -34,7 +34,7 @@ exports.updateProfile = async (req, res, next) => {
     if (displayname !== undefined)
       user.displayname = String(displayname).trim();
     if (description !== undefined) user.description = String(description);
-    if (username !== undefined) user.username = String(username).trim();
+    if (username !== undefined) user.username = String(usernamze).trim();
     if (email !== undefined) user.email = String(email).trim();
 
     await user.save();
@@ -42,7 +42,7 @@ exports.updateProfile = async (req, res, next) => {
     const data = user.toJSON ? user.toJSON() : user;
     delete data.password;
 
-    res.json({ success: true, message: "Profile updated", data });
+    res.json({ success: true, message: 'Profile updated', data });
   } catch (err) {
     next(err);
   }
@@ -51,7 +51,7 @@ exports.updateProfile = async (req, res, next) => {
 exports.deleteProfile = async (req, res, next) => {
   try {
     const user = req.user;
-    if (!user) return res.status(401).json({ error: "Unauthorized" });
+    if (!user) return res.status(401).json({ error: 'Unauthorized' });
 
     const SOFT_DELETE = true; // soft delete, delete this line or set to false for hard delete
 
@@ -63,8 +63,8 @@ exports.deleteProfile = async (req, res, next) => {
       await user.destroy();
     }
 
-    res.clearCookie("refreshToken");
-    res.json({ success: true, message: "Profile deleted", data: null });
+    res.clearCookie('refreshToken');
+    res.json({ success: true, message: 'Profile deleted', data: null });
   } catch (err) {
     next(err);
   }

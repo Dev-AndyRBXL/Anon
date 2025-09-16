@@ -1,5 +1,5 @@
-const { body, validationResult } = require("express-validator");
-const config = require("../config");
+const { body, validationResult } = require('express-validator');
+const config = require('../config');
 
 // ---- Used in Auth.routes.js ----
 /**
@@ -14,61 +14,42 @@ const validateResult = (req, res, next) => {
 };
 
 const signupValidation = [
-  body("displayname")
+  body('displayname')
     .optional()
     .trim()
     .isLength({ min: 3, max: 32 })
-    .withMessage("Displayname must be between 3 and 32 characters"),
+    .withMessage('Displayname must be between 3 and 32 characters'),
 
-  body("username")
+  body('username')
     .notEmpty()
-    .withMessage("Username is required")
+    .withMessage('Username is required')
     .trim()
     .isLength({ min: 3, max: 32 })
-    .withMessage("Username must be between 3 and 32 characters")
+    .withMessage('Username must be between 3 and 32 characters')
     .matches(/^[a-z0-9_.]+$/)
     .withMessage(
       "Username can only contain lowercase letters, numbers, '_' and '.'"
     ),
 
-  body("email")
+  body('email')
     .notEmpty()
-    .withMessage("Email is required")
+    .withMessage('Email is required')
     .trim()
     .isEmail()
-    .withMessage("Email is invalid"),
+    .withMessage('Email is invalid'),
 
-  body("password")
+  body('password')
     .notEmpty()
     .withMessage("Password can't be empty")
-    .isLength({ min: 8 })
-    .withMessage("Password must be at least 8 characters long"),
+    .isLength({ min: 8, max: 64 })
+    .withMessage('Password must be at least 8 characters long'),
 ];
 
 const loginValidation = [
-  body("username")
-    .notEmpty()
-    .withMessage("Username is required")
-    .trim()
-    .isLength({ min: 3, max: 32 })
-    .withMessage("Username must be between 3 and 32 characters"),
-
-  body("password").notEmpty().withMessage("Password can't be empty"),
+  body('username').notEmpty().withMessage('Username is required'),
+  body('password').notEmpty().withMessage("Password can't be empty"),
 ];
 // --------------------------------
-
-/**
- * Always validate our API before
- * letting the user access its CRUD methods...
- * We don't want third-parties messing with our database
- */
-const validateApiKey = (req, res, next) => {
-  const apiKey = req.header("x-api-key");
-  if (!apiKey || apiKey !== config.apiKey) {
-    return next({ status: 401, message: "Unauthorized API key" });
-  }
-  next();
-};
 
 module.exports = {
   validateResult,

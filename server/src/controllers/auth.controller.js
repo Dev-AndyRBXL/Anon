@@ -20,13 +20,7 @@ exports.signup = async (req, res, next) => {
     res.status(201).json({
       success: true,
       message: 'User created',
-      data: {
-        id: user.id,
-        username: user.username,
-        displayname: user.displayname ?? '',
-        email: user.email,
-        role: user.role,
-      },
+      user,
     });
   } catch (err) {
     if (
@@ -48,10 +42,9 @@ exports.signup = async (req, res, next) => {
 exports.login = async (req, res, next) => {
   try {
     const { identifier, password } = req.body;
-    const user = await User.findOne({ where: { [Op.or]: [
-      { username: identifier },
-      { email: identifier }
-    ] } });
+    const user = await User.findOne({
+      where: { [Op.or]: [{ username: identifier }, { email: identifier }] },
+    });
     if (!user || !(await user.comparePassword(password))) {
       return sendError(res, 401, 'Invalid credentials', []);
     }
@@ -77,23 +70,22 @@ exports.login = async (req, res, next) => {
       success: true,
       message: 'Login successful',
       accessToken,
-      data: {
-        id: user.id,
-        username: user.username,
-        displayname: user.displayname,
-        email: user.email,
-        role: user.role,
-        description: user.description,
-      },
+      user,
     });
   } catch (err) {
     next(err);
   }
 };
 
+// Logout
+exports.logout = (req, res) => {
+  res.clearCookie('refreshToken');
+  res.json({ success: true, message: 'Logged out' });
+};
+
 // Refresh token
 exports.refresh = (req, res) => {
-  const refreshToken = req.cookies.refreshToken;  
+  const refreshToken = req.cookies.refreshToken;
   if (!refreshToken) return sendError(res, 401, 'Refresh token required');
 
   jwt.verify(refreshToken, config.refreshSecret, (err, decoded) => {
@@ -116,10 +108,4 @@ exports.refresh = (req, res) => {
 
     res.json({ success: true, accessToken });
   });
-};
-
-// Logout
-exports.logout = (req, res) => {
-  res.clearCookie('refreshToken');
-  res.json({ success: true, message: 'Logged out' });
 };
