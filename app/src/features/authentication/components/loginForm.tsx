@@ -1,3 +1,4 @@
+import './styles/LoginForm.css';
 import { useForm } from 'react-hook-form';
 import useLogin from '../hooks/useLogin';
 import type { LoginPayload } from '../interfaces/authTypes';
@@ -16,7 +17,7 @@ export function LoginForm() {
     handleSubmit,
     formState: { errors },
     setError,
-  } = useForm<LoginPayload>({ mode: 'onBlur', reValidateMode: 'onSubmit' });
+  } = useForm<LoginPayload>({ mode: 'all', reValidateMode: 'onSubmit' });
 
   const onSubmit = async (data: LoginPayload) => {
     setServerErrors({});
@@ -47,49 +48,51 @@ export function LoginForm() {
   };
 
   return (
-    <div className="login-form form">
-      <div className="login-form-container">
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <div>
-            <label htmlFor="identifier">Username or Email</label>
-            <input
-              id="identifier"
-              {...register('identifier', {
-                required: 'This field is required',
-                validate: (value) => {
-                  const isEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
-                  const isUsername = /^[a-zA-Z0-9_]$/.test(value);
-                  return (
-                    isEmail || isUsername || 'Enter a valid email or username'
-                  );
-                },
-              })}
-              autoComplete="username"
-              autoFocus
-              aria-required
-            />
-            {errors.identifier && (
-              <p className="error">{errors.identifier.message}</p>
-            )}
-          </div>
-          <div>
-            <label htmlFor="password">Password</label>
-            <input
-              id="password"
-              type="password"
-              {...register('password', { required: 'Password is required' })}
-              autoComplete="current-password"
-              aria-required
-            />
-            {errors.password && (
-              <p className="error">{errors.password.message}</p>
-            )}
-          </div>
-          <button type="submit" disabled={loading}>
-            {loading ? 'Logging in...' : 'Login'}
-          </button>
-        </form>
+    <form onSubmit={handleSubmit(onSubmit)} className="login-form" noValidate>
+      <div className="login-form-field">
+        <label htmlFor="identifier" className="login-form-label">
+          Username or Email
+        </label>
+        <input
+          id="identifier"
+          className="login-form-input"
+          {...register('identifier', {
+            required: 'This field is required',
+            validate: (value) => {
+              const isEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+              const isUsername = /^[a-zA-Z0-9_]+$/.test(value);
+              return isEmail || isUsername || 'Enter a valid email or username';
+            },
+          })}
+          autoComplete="username"
+          autoFocus
+          aria-required
+        />
+        {errors.identifier && (
+          <p className="login-form-error">{errors.identifier.message}</p>
+        )}
       </div>
-    </div>
+
+      <div className="login-form-field">
+        <label htmlFor="password" className="login-form-label">
+          Password
+        </label>
+        <input
+          id="password"
+          type="password"
+          className="login-form-input"
+          {...register('password', { required: 'Password is required' })}
+          autoComplete="current-password"
+          aria-required
+        />
+        {errors.password && (
+          <p className="login-form-error">{errors.password.message}</p>
+        )}
+      </div>
+
+      <button type="submit" className="login-form-submit" disabled={loading}>
+        {loading ? 'Logging in...' : 'Login'}
+      </button>
+    </form>
   );
 }

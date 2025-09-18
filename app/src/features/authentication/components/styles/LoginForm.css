@@ -1,0 +1,13 @@
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5em;
+}
+.login-form-field {
+  display: flex;
+  flex-direction: column;
+}
+
+.login-form-error {
+  color: var(--color-error);
+}

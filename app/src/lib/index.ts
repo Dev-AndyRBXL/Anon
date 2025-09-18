@@ -28,7 +28,6 @@ export const setupInterceptors = (
           err.config.headers['Authorization'] = `Bearer ${data.accessToken}`;
           return client(err.config); // Retry original request
         } catch {
-          // Refresh failed, force logout
           return Promise.reject(err);
         }
       }

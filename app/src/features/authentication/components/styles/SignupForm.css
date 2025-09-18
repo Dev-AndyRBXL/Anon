@@ -1,0 +1,13 @@
+.signup-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5em;
+}
+.signup-form-field {
+  display: flex;
+  flex-direction: column;
+}
+
+.signup-form-error {
+  color: var(--color-error);
+}

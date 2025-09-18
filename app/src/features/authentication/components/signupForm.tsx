@@ -1,3 +1,4 @@
+import './styles/SignupForm.css';
 import { useForm } from 'react-hook-form';
 import type { SignupPayload } from '../interfaces/authTypes';
 import useSignup from '../hooks/useSignup';
@@ -16,7 +17,7 @@ export function SignupForm() {
     handleSubmit,
     formState: { errors },
     setError,
-  } = useForm<SignupPayload>({ mode: 'onBlur', reValidateMode: 'onSubmit' });
+  } = useForm<SignupPayload>({ mode: 'all', reValidateMode: 'onSubmit' });
 
   const onSubmit = async (data: SignupPayload) => {
     setServerErrors({});
@@ -44,79 +45,93 @@ export function SignupForm() {
   };
 
   return (
-    <div className="signup-form form">
-      <div className="signup-form-container">
-        <form onSubmit={handleSubmit(onSubmit)} noValidate>
-          <div>
-            <label htmlFor="displayname">Display Name</label>
-            <input
-              id="displayname"
-              {...register('displayname', {
-                minLength: { value: 3, message: 'Minimum 3 characters' },
-                maxLength: { value: 32, message: 'Maximum 32 characters' },
-              })}
-              autoFocus
-            />
-            {errors.displayname && (
-              <p className="error">{errors.displayname.message}</p>
-            )}
-          </div>
-
-          <div>
-            <label htmlFor="username">Username</label>
-            <input
-              id="username"
-              {...register('username', {
-                required: 'Username is required',
-                minLength: { value: 3, message: 'Minimum 3 characters' },
-                maxLength: { value: 32, message: 'Maximum 32 characters' },
-              })}
-              aria-required
-            />
-            {errors.username && (
-              <p className="error">{errors.username.message}</p>
-            )}
-          </div>
-
-          <div>
-            <label htmlFor="email">Email</label>
-            <input
-              type="email"
-              id="email"
-              {...register('email', {
-                required: 'Email is required',
-                pattern: {
-                  value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-                  message: 'Invalid email address',
-                },
-              })}
-              aria-required
-            />
-            {errors.email && <p className="error">{errors.email.message}</p>}
-          </div>
-
-          <div>
-            <label htmlFor="password">Password</label>
-            <input
-              type="password"
-              id="password"
-              {...register('password', {
-                required: 'Password is required',
-                minLength: { value: 8, message: 'Minimum 8 characters' },
-                maxLength: { value: 64, message: 'Maximum 64 characters' },
-              })}
-              aria-required
-            />
-            {errors.password && (
-              <p className="error">{errors.password.message}</p>
-            )}
-          </div>
-
-          <button type="submit" disabled={loading}>
-            {loading ? 'Signing up...' : 'Signup'}
-          </button>
-        </form>
+    <form onSubmit={handleSubmit(onSubmit)} className="signup-form" noValidate>
+      <div className="signup-form-field">
+        <label htmlFor="displayname" className="signup-form-label">
+          Display Name
+        </label>
+        <input
+          id="displayname"
+          className="signup-form-input"
+          {...register('displayname', {
+            minLength: { value: 3, message: 'Minimum 3 characters' },
+            maxLength: { value: 32, message: 'Maximum 32 characters' },
+          })}
+          autoFocus
+        />
+        {errors.displayname && (
+          <p className="signup-form-error">{errors.displayname.message}</p>
+        )}
       </div>
-    </div>
+
+      <div className="signup-form-field">
+        <label htmlFor="username" className="signup-form-label">
+          Username
+        </label>
+        <input
+          id="username"
+          className="signup-form-input"
+          {...register('username', {
+            required: 'Username is required',
+            minLength: { value: 3, message: 'Minimum 3 characters' },
+            maxLength: { value: 32, message: 'Maximum 32 characters' },
+            pattern: {
+              value: /^[a-z0-9_.]+$/,
+              message: 'Username cannot contain spaces',
+            },
+          })}
+          aria-required
+        />
+        {errors.username && (
+          <p className="signup-form-error">{errors.username.message}</p>
+        )}
+      </div>
+
+      <div className="signup-form-field">
+        <label htmlFor="email" className="signup-form-label">
+          Email
+        </label>
+        <input
+          type="email"
+          id="email"
+          className="signup-form-input"
+          {...register('email', {
+            required: 'Email is required',
+            pattern: {
+              value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+              message: 'Invalid email address',
+            },
+          })}
+          aria-required
+        />
+        {errors.email && (
+          <p className="signup-form-error">{errors.email.message}</p>
+        )}
+      </div>
+
+      <div className="signup-form-field">
+        <label htmlFor="password" className="signup-form-label">
+          Password
+        </label>
+        <input
+          type="password"
+          id="password"
+          className="signup-form-input"
+          {...register('password', {
+            required: 'Password is required',
+            minLength: { value: 8, message: 'Minimum 8 characters' },
+            maxLength: { value: 64, message: 'Maximum 64 characters' },
+          })}
+          aria-required
+        />
+        {errors.password && (
+          <p className="signup-form-error">{errors.password.message}</p>
+        )}
+      </div>
+
+      <button type="submit" className="signup-form-submit" disabled={loading}>
+        {loading ? 'Signing up...' : 'Signup'}
+      </button>
+    </form>
   );
 }

@@ -1,14 +1,21 @@
 import type { ReactNode } from 'react';
 
-export function HomeSection<T extends ReactNode>({
-  features,
-}: {
-  features: T[];
-}) {
+interface SectionProps {
+  features: Record<string, ReactNode>;
+}
+
+export default function AboutSection({ features }: SectionProps) {
   return (
-    <section className="home-section">
-      <h2>{}</h2>
-      <ul className="home-features">{features}</ul>
+    <section className="features-section">
+      <h2>What's new?</h2>
+      <ul className="features-list">
+        {Object.entries(features).map(([key, value]) => (
+          <li key={key} id={key} className="feature-item">
+            <h3>{key}</h3>
+            {value}
+          </li>
+        ))}
+      </ul>
     </section>
   );
 }

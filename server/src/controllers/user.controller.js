@@ -1,4 +1,6 @@
-exports.updateProfile = async (req, res, next) => {
+import { User } from '../models';
+
+exports.updateMe = async (req, res, next) => {
   try {
     const user = req.user;
     if (!user) return res.status(401).json({ error: 'Unauthorized' });
@@ -48,7 +50,7 @@ exports.updateProfile = async (req, res, next) => {
   }
 };
 
-exports.deleteProfile = async (req, res, next) => {
+exports.deleteMe = async (req, res, next) => {
   try {
     const user = req.user;
     if (!user) return res.status(401).json({ error: 'Unauthorized' });
@@ -69,3 +71,28 @@ exports.deleteProfile = async (req, res, next) => {
     next(err);
   }
 };
+
+export async function getUser(req, res, next) {
+  try {
+    const { userId } = req.params;
+
+    if (!userId) return res.status(400).json({ error: 'User ID is required' });
+
+    const user = await User.findById(userId);
+    if (!user) return res.status(404).json({ error: 'User not found' });
+
+    const data = user.toJSON ? user.toJSON() : { ...user };
+
+    delete data.password;
+    delete data.role;
+    delete data.email;
+
+    res.json({
+      success: true,
+      message: 'Profile fetched',
+      data,
+    });
+  } catch (err) {
+    next(err);
+  }
+}

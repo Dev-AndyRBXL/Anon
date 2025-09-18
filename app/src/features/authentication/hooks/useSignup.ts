@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import type { User } from '../../../interfaces/userInterfaces';
 import type { SignupPayload } from '../interfaces/authTypes';
-import { signup as apiSignup } from '../services/authService';
+import { signup as apiSignup, handleAuthError } from '../services/authService';
 import { useAuth } from '../../../hooks/useAuth';
 
 export default function useSignup() {
@@ -17,24 +17,13 @@ export default function useSignup() {
       const res = await apiSignup(payload);
       const user: User = res.user;
       const accessToken: string = res.accessToken;
-
       setAuth(user, accessToken);
       return user;
     } catch (err: any) {
       console.log(err);
-
-      if (err.response?.data) {
-        if (typeof err.response.data.message === 'string') {
-          setError(err.response.data.message);
-        } else if (Array.isArray(err.response.data.errors)) {
-          setError(err.response.data.errors.map((e: any) => e.msg).join(', '));
-        } else {
-          setError('Signup failed due to server validation errors');
-        }
-      } else {
-        setError(err.message || 'Unknown server error');
-      }
-
+      setError(
+        handleAuthError(err, 'Signup failed due to server validation errors')
+      );
       return null;
     } finally {
       setLoading(false);
