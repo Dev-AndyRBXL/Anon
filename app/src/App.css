@@ -1,6 +1,83 @@
-#root {
+.page {
+  width: 100%;
+  min-height: 100vh;
+}
+
+.homepage {
+  display: flex;
+  flex-direction: column;
+}
+
+.homepage-container {
   max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
+  padding: var(--spacing);
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.signup-page,
+.login-page {
+  display: flex;
+  flex-direction: column;
+}
+.signup-page-container,
+.login-page-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex: 1;
+}
+
+.signup-form-container,
+.login-form-container {
+  background-color: #181818;
+  border: 2px solid var(--color-secondary);
+  border-radius: var(--radius);
+  max-width: 50vw;
+  min-width: 320px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: var(--spacing);
+  padding: 3em 6em;
+  box-shadow: 6px 6px 16px #000;
+}
+
+.header {
+  padding: 2rem 3rem;
+  background: #1d1d1d;
+  display: flex;
+  justify-content: center;
+}
+.header-container {
+  max-width: 1280px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex: 1;
+}
+.header-list {
+  display: flex;
+  gap: var(--spacing);
+  flex-wrap: wrap;
+}
+
+@media (max-width: 768px) {
+  .signup-form-container,
+  .login-form-container {
+    max-width: 90vw;
+    padding: 2em;
+  }
+
+  .header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  .header-list {
+    justify-content: flex-start;
+  }
 }

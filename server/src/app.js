@@ -4,7 +4,6 @@ const authRoutes = require('./routes/auth.routes');
 const userRoutes = require('./routes/user.routes');
 const errorMiddleware = require('./middlewares/error.middleware');
 const cors = require('cors');
-const { validateApiKey } = require('./utils/validation');
 
 const app = express();
 
@@ -31,8 +30,8 @@ app.use(
  * 
  */
 
-app.use('/api/auth', validateApiKey, authRoutes);
-app.use('/api/users', validateApiKey, userRoutes);
+app.use('/api/auth', authRoutes);
+app.use('/api/users', userRoutes);
 
 app.use(errorMiddleware);
 

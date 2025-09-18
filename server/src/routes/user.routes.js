@@ -1,10 +1,16 @@
-const express = require("express");
+const express = require('express');
 const router = express.Router();
 
-const authenticateJwt = require("../middlewares/auth.middleware");
-const { updateProfile, deleteProfile } = require("../controllers/users.controller");
+const authenticateJwt = require('../middlewares/user.middleware');
+const {
+  updateProfile,
+  deleteProfile,
+  getUser,
+} = require('../controllers/user.controller');
 
-router.patch("/me", authenticateJwt, updateProfile);
-router.delete("/me", authenticateJwt, deleteProfile);
+router.patch('/me', authenticateJwt, updateProfile);
+router.delete('/me', authenticateJwt, deleteProfile);
+
+router.get('/:userid', getUser);
 
 module.exports = router;

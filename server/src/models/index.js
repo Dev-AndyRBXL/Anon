@@ -3,17 +3,22 @@ const config = require('../config');
 const logger = require('../utils/logger');
 
 // Initialize Sequelize
-const sequelize = new Sequelize(config.dbName, config.dbUser, config.dbPassword, {
-  host: config.dbHost,
-  dialect: config.dbDialect,
-  port: config.dbPort,
-  logging: (msg) => logger.info(msg),
-  define: {
-    // Avoid Sequelize creating timestamp fields automatically if not needed
-    timestamps: true,
-    underscored: true, // optional: use snake_case in DB
-  },
-});
+const sequelize = new Sequelize(
+  config.dbName,
+  config.dbUser,
+  config.dbPassword,
+  {
+    host: config.dbHost,
+    dialect: config.dbDialect,
+    port: config.dbPort,
+    logging: (msg) => logger.info(msg),
+    define: {
+      // Avoid Sequelize creating timestamp fields automatically if not needed
+      timestamps: true,
+      underscored: true, // optional: use snake_case in DB
+    },
+  }
+);
 
 const db = {};
 db.Sequelize = Sequelize;
@@ -30,8 +35,12 @@ const syncDatabase = async () => {
     await sequelize.sync({ alter: true });
     logger.info('Database synced successfully');
   } catch (err) {
-    logger.error('Failed to connect or sync DB:', err);
-    process.exit(1); 
+    logger.error('Failed to connect or sync DB:', err.message);
+    if (err.parent) {
+      logger.error('Parent error:', err.parent.message);
+    }
+    logger.error(err.stack);
+    process.exit(1);
   }
 };
 

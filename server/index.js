@@ -6,8 +6,8 @@ const config = require('./src/config');
 
 sequelize.sync({ force: false }).then(() => {
   app.listen(config.port, () => {
-    if (config.isDevelopment) {
-      logger.info(`Server running on http://localhost:${port}!`);
+    if (config.nodeEnv === 'development') {
+      logger.info(`Server running on http://localhost:${port}`);
     }
   });
 });

@@ -5,9 +5,8 @@ const refreshExpiresIn = '1y';
 
 const env = {
   // Server
-  port: process.env.PORT || 3001,
+  port: process.env.PORT,
   nodeEnv: process.env.NODE_ENV || 'development',
-  apiKey: process.env.API_KEY,
 
   // DB
   dbHost: process.env.DB_HOST,
@@ -18,13 +17,11 @@ const env = {
   dbSalt: process.env.DB_SALT,
   dbDialect: 'postgres',
 
-  // Authentication
-  accessSecret: process.env.ACCESS_SECRET || 'default',
+  // JWT
+  accessSecret: process.env.ACCESS_SECRET,
   refreshSecret: process.env.REFRESH_SECRET,
-  accessExpiresIn:
-    process.env.NODE_ENV === 'production' ? accessExpiresIn : '30m',
-  refreshExpiresIn:
-    process.env.NODE_ENV === 'production' ? refreshExpiresIn : '1h',
+  accessExpiresIn: accessExpiresIn,
+  refreshExpiresIn: refreshExpiresIn,
 };
 
 // Utils
